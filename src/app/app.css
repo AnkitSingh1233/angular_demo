@@ -1,0 +1,11 @@
+.card {
+  border-radius: 15px;
+}
+
+.input-group-text {
+  background: white;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}

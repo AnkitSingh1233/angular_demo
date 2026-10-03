@@ -1,0 +1,77 @@
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light">
+  <div class="card shadow border-0 login-card">
+    <div class="card-body p-4">
+
+      <div class="text-center mb-4">
+        <i class="bi bi-person-circle fs-1 text-primary"></i>
+        <h2 class="mt-2">Login</h2>
+        <p class="text-muted">Welcome back! Please login to your account.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger py-2" role="alert">{{ errorMessage() }}</div>
+        }
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label" for="email">Email</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input id="email" type="email" class="form-control" formControlName="email"
+                   placeholder="Enter your email" autocomplete="email"
+                   [class.is-invalid]="email.invalid && email.touched" />
+            <div class="invalid-feedback">
+              @if (email.errors?.['required']) { Email is required }
+              @else if (email.errors?.['email']) { Enter a valid email }
+            </div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input id="password" class="form-control" formControlName="password"
+                   [type]="showPassword() ? 'text' : 'password'"
+                   placeholder="Enter your password" autocomplete="current-password"
+                   [class.is-invalid]="password.invalid && password.touched" />
+            <button type="button" class="btn btn-outline-secondary"
+                    (click)="togglePassword()" aria-label="Toggle password visibility">
+              <i class="bi" [class.bi-eye]="!showPassword()" [class.bi-eye-slash]="showPassword()"></i>
+            </button>
+            <div class="invalid-feedback">
+              @if (password.errors?.['required']) { Password is required }
+              @else if (password.errors?.['minlength']) { Minimum 6 characters }
+            </div>
+          </div>
+        </div>
+
+        <!-- Remember + Forgot -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe" formControlName="rememberMe" />
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <a href="#" class="text-decoration-none">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading()">
+          @if (loading()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>Signing in...
+          } @else {
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          }
+        </button>
+      </form>
+
+      <div class="text-center mt-4">
+        <span class="text-muted">Don't have an account?</span>
+        <a href="#" class="text-decoration-none ms-1">Register</a>
+      </div>
+
+    </div>
+  </div>
+</div>
