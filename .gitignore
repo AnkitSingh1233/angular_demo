@@ -42,3 +42,19 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Capacitor iOS
+ios/App/Pods/
+ios/App/build/
+ios/App/App/public/
+ios/DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Capacitor Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/capacitor-cordova-android-plugins/
