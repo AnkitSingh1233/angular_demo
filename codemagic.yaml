@@ -1,0 +1,39 @@
+workflows:
+  ios-unsigned:
+    name: Angular Capacitor iOS (unsigned)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      node: 22
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: npm ci
+      - name: Build Angular
+        script: npx ng build
+      - name: Add iOS platform
+        script: |
+          npm install @capacitor/ios
+          npx cap add ios
+          npx cap sync ios
+      - name: Build unsigned app
+        script: |
+          cd ios/App
+          if [ -d App.xcworkspace ]; then
+            xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
+              -sdk iphoneos -derivedDataPath build \
+              CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+          else
+            xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+              -sdk iphoneos -derivedDataPath build \
+              CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+          fi
+      - name: Package IPA
+        script: |
+          cd ios/App
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -r App-unsigned.ipa Payload
+    artifacts:
+      - ios/App/App-unsigned.ipa
